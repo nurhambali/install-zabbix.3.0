@@ -53,7 +53,7 @@ DBHost=localhost
 # line 116: add DB password for Zabbix
 DBPassword=password
 
-# 
+# setting zabbix 
 setenforce 0
 yum install setroubleshoot
 sealert -a /var/log/audit/audit.log > /opt/audit_report
