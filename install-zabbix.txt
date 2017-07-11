@@ -1,0 +1,65 @@
+###ZABBIX###
+
+# install httpd-2.4.25-1
+yum install -y epel-release wget
+cd /etc/yum.repos.d && wget https://repo.codeit.guru/codeit.el`rpm -q --qf "%{VERSION}" $(rpm -q --whatprovides redhat-release)`.repo
+yum repolist
+yum install -y httpd-2.4.25-1.el7.codeit.x86_64 
+setsebool -P httpd_execmem=1
+systemctl start httpd
+systemctl enable httpd
+systemctl sattus httpd
+httpd -V
+
+# install PHP 
+yum -y install php php-mbstring php-pear 
+#Merubah time.zone#
+vi /etc/php.ini 
+date.timezone = "Asia/Jakarta"
+systemctl restart httpd
+
+# install mariadb
+yum -y install mariadb-server 
+systemctl start mariadb
+systemctl enable mariadb
+mysql_secure_installation 
+
+# install zabbix
+
+ yum -y install php-mysql php-gd php-xml php-bcmath 
+ yum -y install http://repo.zabbix.com/zabbix/3.2/rhel/7/x86_64/zabbix-release-3.2-1.el7.noarch.rpm 
+ yum -y install zabbix-get zabbix-server-mysql zabbix-web-mysql zabbix-agent 
+ 
+# create database
+
+ mysql -u root -p 
+ create database zabbix;
+ grant all privileges on zabbix.* to zabbix@'localhost' identified by 'hambali1'; 
+ grant all privileges on zabbix.* to zabbix@'%' identified by 'password'; 
+ flush privileges; 
+ exit 
+ 
+# import sql
+ cd /usr/share/doc/zabbix-server-mysql-*/ 
+ gunzip create.sql.gz 
+ mysql -u root -p zabbix < create.sql 
+
+ 
+#  	Configure and start Zabbix Server. 
+
+vi /etc/zabbix/zabbix_server.conf 
+# line 82: add
+DBHost=localhost
+# line 116: add DB password for Zabbix
+DBPassword=password
+
+# 
+setenforce 0
+yum install setroubleshoot
+sealert -a /var/log/audit/audit.log > /opt/audit_report
+cat /opt/audit_report
+semodule -i my-zabbixserver.pp
+
+systemctl start zabbix-server
+systemctl enable zabbix-server 
+
