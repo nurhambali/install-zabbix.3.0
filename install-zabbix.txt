@@ -63,3 +63,9 @@ semodule -i my-zabbixserver.pp
 systemctl start zabbix-server
 systemctl enable zabbix-server 
 
+#setting firewall 
+firewall-cmd --add-service={http,https} --permanent 
+firewall-cmd --add-port={10051/tcp,10050/tcp} --permanent
+firewall-cmd --reload 
+
+
