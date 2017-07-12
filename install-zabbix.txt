@@ -8,7 +8,7 @@ yum install -y httpd-2.4.25-1.el7.codeit.x86_64
 setsebool -P httpd_execmem=1
 systemctl start httpd
 systemctl enable httpd
-systemctl sattus httpd
+systemctl status httpd
 httpd -V
 
 # install PHP 
