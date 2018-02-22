@@ -2,7 +2,7 @@
 
 # install httpd-2.4.25-1
 yum install -y epel-release wget
-cd /etc/yum.repos.d && wget https://repo.codeit.guru/codeit.el`rpm -q --qf "%{VERSION}" $(rpm -q --whatprovides redhat-release)`.repo
+cd /etc/yum.repos.d && wget https://repo.codeit.guru/codeit.el7.repo
 yum repolist
 yum install -y httpd-2.4.25-1.el7.codeit.x86_64 
 setsebool -P httpd_execmem=1
