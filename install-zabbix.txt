@@ -35,7 +35,7 @@ mysql_secure_installation
  mysql -u root -p 
  create database zabbix;
  grant all privileges on zabbix.* to zabbix@'localhost' identified by 'hambali1'; 
- grant all privileges on zabbix.* to zabbix@'%' identified by 'password'; 
+ grant all privileges on zabbix.* to zabbix@'%' identified by 'hambali1'; 
  flush privileges; 
  exit 
  
@@ -51,7 +51,7 @@ vi /etc/zabbix/zabbix_server.conf
 # line 82: add
 DBHost=localhost
 # line 116: add DB password for Zabbix
-DBPassword=password
+DBPassword=hambali1
 
 # setting zabbix 
 setenforce 0
@@ -60,12 +60,25 @@ sealert -a /var/log/audit/audit.log > /opt/audit_report
 cat /opt/audit_report
 semodule -i my-zabbixserver.pp
 
+#edit selinux ubah dari enforcing menjadi disabled
+vi /etc/selinux/config
+##SELINUX=enforcing
+SELINUX=disabled
+
+#restart server
+reboot
+
+#start zabbix-server
+
 systemctl start zabbix-server
 systemctl enable zabbix-server 
+systemctl status zabbix
+
 
 #setting firewall 
 firewall-cmd --add-service={http,https} --permanent 
 firewall-cmd --add-port={10051/tcp,10050/tcp} --permanent
 firewall-cmd --reload 
 
+##buka zabbix via web browser dan ikuti step by step nya
 
